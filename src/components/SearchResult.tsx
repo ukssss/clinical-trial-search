@@ -1,7 +1,9 @@
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { css, styled } from 'styled-components';
+
+import { useKeyControl } from '@/hooks';
 
 interface SearchResultProps {
   diseaseList: DiseaseProps[];
@@ -14,31 +16,8 @@ interface SearchRecommendListProps {
 
 const SearchResult = ({ diseaseList, diseaseName }: SearchResultProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
-  const listRef = useRef<HTMLUListElement | null>(null);
 
-  useEffect(() => {
-    if (listRef.current) {
-      listRef.current.focus();
-    }
-  }, []);
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    switch (e.key) {
-      case 'ArrowUp':
-        e.preventDefault();
-        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev));
-        break;
-      case 'ArrowDown':
-        e.preventDefault();
-        setSelectedIndex((prev) => (prev < diseaseList.length - 1 ? prev + 1 : prev));
-        break;
-      case 'Enter':
-        alert('test');
-        break;
-      default:
-        break;
-    }
-  };
+  useKeyControl({ setSelectedIndex, diseaseList });
 
   return (
     <SearchResultContainer>
@@ -52,7 +31,7 @@ const SearchResult = ({ diseaseList, diseaseName }: SearchResultProps) => {
       )}
 
       <SearchRecommendInfo>{diseaseList.length > 0 && diseaseName ? '추천 검색어' : '검색어 없음'}</SearchRecommendInfo>
-      <SearchRecommendContainer ref={listRef} tabIndex={0} onKeyDown={handleKeyDown}>
+      <SearchRecommendContainer>
         {diseaseList.length > 0 && diseaseName ? (
           <>
             {diseaseList.map((disease, index) => (
