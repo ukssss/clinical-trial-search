@@ -5,6 +5,8 @@ import { css, styled } from 'styled-components';
 
 import { useKeyControl } from '@/hooks';
 
+import { emphasisText } from '../utils/emphasisText';
+
 interface SearchResultProps {
   diseaseList: DiseaseProps[];
   diseaseName: string;
@@ -36,7 +38,7 @@ const SearchResult = ({ diseaseList, diseaseName }: SearchResultProps) => {
           {diseaseList.map((disease, index) => (
             <SearchRecommendList key={index} selected={selectedIndex === index}>
               <FontAwesomeIcon icon={faMagnifyingGlass} />
-              <SearchRecommendWord>{disease.sickNm}</SearchRecommendWord>
+              <SearchRecommendWord>{emphasisText({ text: disease.sickNm, keyword: diseaseName })}</SearchRecommendWord>
             </SearchRecommendList>
           ))}
         </SearchRecommendContainer>
