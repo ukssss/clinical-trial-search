@@ -1,13 +1,45 @@
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { styled } from 'styled-components';
+import { useEffect, useRef, useState } from 'react';
+import { css, styled } from 'styled-components';
 
 interface SearchResultProps {
   diseaseList: DiseaseProps[];
   diseaseName: string;
 }
 
+interface SearchRecommendListProps {
+  isSelected: boolean;
+}
+
 const SearchResult = ({ diseaseList, diseaseName }: SearchResultProps) => {
+  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+  const listRef = useRef<HTMLUListElement | null>(null);
+
+  useEffect(() => {
+    if (listRef.current) {
+      listRef.current.focus();
+    }
+  }, []);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    switch (e.key) {
+      case 'ArrowUp':
+        e.preventDefault();
+        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev));
+        break;
+      case 'ArrowDown':
+        e.preventDefault();
+        setSelectedIndex((prev) => (prev < diseaseList.length - 1 ? prev + 1 : prev));
+        break;
+      case 'Enter':
+        alert('test');
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <SearchResultContainer>
       {diseaseList.length > 0 && diseaseName ? (
@@ -20,11 +52,11 @@ const SearchResult = ({ diseaseList, diseaseName }: SearchResultProps) => {
       )}
 
       <SearchRecommendInfo>{diseaseList.length > 0 && diseaseName ? '추천 검색어' : '검색어 없음'}</SearchRecommendInfo>
-      <SearchRecommendContainer>
+      <SearchRecommendContainer ref={listRef} tabIndex={0} onKeyDown={handleKeyDown}>
         {diseaseList.length > 0 && diseaseName ? (
           <>
             {diseaseList.map((disease, index) => (
-              <SearchRecommendList key={index}>
+              <SearchRecommendList key={index} isSelected={selectedIndex === index}>
                 <FontAwesomeIcon icon={faMagnifyingGlass} />
                 <SearchRecommendWord>{disease.sickNm}</SearchRecommendWord>
               </SearchRecommendList>
@@ -80,7 +112,7 @@ const SearchRecommendWord = styled.span`
   padding: 25px 10px 25px 45px;
 `;
 
-const SearchRecommendList = styled.li`
+const SearchRecommendList = styled.li<SearchRecommendListProps>`
   height: 42px;
   display: flex;
   flex-direction: row;
@@ -92,6 +124,12 @@ const SearchRecommendList = styled.li`
     left: 20px;
     color: #a6afb7;
   }
+
+  ${(props) =>
+    props.isSelected &&
+    css`
+      opacity: 0.3;
+    `}
 `;
 
 export default SearchResult;
