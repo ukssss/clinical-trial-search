@@ -11,7 +11,8 @@
     "format": "prettier --cache --write",
     "lint": "eslint --cache .",
     "serve": "json-server server/db/data.json --port 4000",
-    "all": "run-p serve dev"
+    "all": "run-p serve dev",
+    "allbuild": "run-p serve build"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
