@@ -12,6 +12,7 @@ const SearchPage = () => {
   };
 
   const diseaseList = useLocalCache(diseaseName);
+  const existsDisease = diseaseList.length > 0 && diseaseName;
 
   return (
     <StyledContainer>
@@ -22,7 +23,7 @@ const SearchPage = () => {
         value={diseaseName}
         onChange={changeDiseaseName}
       />
-      <SearchResult diseaseList={diseaseList} diseaseName={diseaseName} />
+      {existsDisease ? <SearchResult diseaseList={diseaseList} diseaseName={diseaseName} /> : ''}
     </StyledContainer>
   );
 };
