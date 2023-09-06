@@ -16,12 +16,13 @@ interface SearchRecommendListProps {
 
 const SearchResult = ({ diseaseList, diseaseName }: SearchResultProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+  const existsDisease = diseaseList.length > 0 && diseaseName;
 
   useKeyControl({ setSelectedIndex, diseaseList });
 
   return (
     <SearchResultContainer>
-      {diseaseList.length > 0 && diseaseName ? (
+      {existsDisease ? (
         <SearchWordContainer>
           <FontAwesomeIcon icon={faMagnifyingGlass} />
           <SearchWord>{diseaseName}</SearchWord>
@@ -29,22 +30,19 @@ const SearchResult = ({ diseaseList, diseaseName }: SearchResultProps) => {
       ) : (
         ''
       )}
-
-      <SearchRecommendInfo>{diseaseList.length > 0 && diseaseName ? '추천 검색어' : '검색어 없음'}</SearchRecommendInfo>
-      <SearchRecommendContainer>
-        {diseaseList.length > 0 && diseaseName ? (
-          <>
-            {diseaseList.map((disease, index) => (
-              <SearchRecommendList key={index} selected={selectedIndex === index}>
-                <FontAwesomeIcon icon={faMagnifyingGlass} />
-                <SearchRecommendWord>{disease.sickNm}</SearchRecommendWord>
-              </SearchRecommendList>
-            ))}
-          </>
-        ) : (
-          ''
-        )}
-      </SearchRecommendContainer>
+      <SearchRecommendInfo>{existsDisease ? '추천 검색어' : '검색어 없음'}</SearchRecommendInfo>
+      {existsDisease ? (
+        <SearchRecommendContainer>
+          {diseaseList.map((disease, index) => (
+            <SearchRecommendList key={index} selected={selectedIndex === index}>
+              <FontAwesomeIcon icon={faMagnifyingGlass} />
+              <SearchRecommendWord>{disease.sickNm}</SearchRecommendWord>
+            </SearchRecommendList>
+          ))}
+        </SearchRecommendContainer>
+      ) : (
+        ''
+      )}
     </SearchResultContainer>
   );
 };
