@@ -43,7 +43,15 @@ export const useLocalCache = (diseaseName: string) => {
       }
     };
 
-    getDiseaseList();
+    if (diseaseName) {
+      const debounce = setTimeout(() => {
+        getDiseaseList();
+      }, 500);
+
+      return () => {
+        clearTimeout(debounce);
+      };
+    }
   }, [diseaseName, cache]);
 
   return diseaseList;
