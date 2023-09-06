@@ -9,7 +9,7 @@ interface SearchResultProps {
 }
 
 interface SearchRecommendListProps {
-  isSelected: boolean;
+  selected: boolean;
 }
 
 const SearchResult = ({ diseaseList, diseaseName }: SearchResultProps) => {
@@ -56,7 +56,7 @@ const SearchResult = ({ diseaseList, diseaseName }: SearchResultProps) => {
         {diseaseList.length > 0 && diseaseName ? (
           <>
             {diseaseList.map((disease, index) => (
-              <SearchRecommendList key={index} isSelected={selectedIndex === index}>
+              <SearchRecommendList key={index} selected={selectedIndex === index}>
                 <FontAwesomeIcon icon={faMagnifyingGlass} />
                 <SearchRecommendWord>{disease.sickNm}</SearchRecommendWord>
               </SearchRecommendList>
@@ -126,9 +126,10 @@ const SearchRecommendList = styled.li<SearchRecommendListProps>`
   }
 
   ${(props) =>
-    props.isSelected &&
+    props.selected &&
     css`
-      opacity: 0.3;
+      background-color: #eeeeee;
+      border-radius: 8px;
     `}
 `;
 
